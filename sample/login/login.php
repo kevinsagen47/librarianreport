@@ -15,8 +15,8 @@ use nsysu\lis\templates\adminlte_login;
 /**
  * (2020-09-16) dump 參數 $id 與 $pw 資料內容
  */
-var_dump($id);
-var_dump($pw);
+// var_dump($id);
+// var_dump($pw);
 
 if ($id !== null && $pw !== null) {
     /**
@@ -30,7 +30,7 @@ if ($id !== null && $pw !== null) {
          * 檢查登入的角色
          */
         (isset($_SESSION['login']['role'])) ? $role = $_SESSION['login']['role'] : $role = 'stu';
-        var_dump($role);
+        // var_dump($role);
         identify_role($role, $_SESSION['login']);
 
     }  else {
@@ -62,7 +62,7 @@ $test->html_footer($footer);
 /**
  * (2020-09-16) dump SESSSION['login'] 資料內容
  */
-isset($_SESSION['login']) ? var_dump($_SESSION['login']) : var_dump('');
+// isset($_SESSION['login']) ? var_dump($_SESSION['login']) : var_dump('');
 
 /**
  * (2020-09-16) 顯示登入錯誤訊息

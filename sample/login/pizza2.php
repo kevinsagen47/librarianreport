@@ -164,10 +164,11 @@ echo '
         <input class="w3-input w3-border w3-sand" type="text" name="ID" value="'.$_SESSION['login']['account'].'" readonly>
         <br>
         </p>
-        <p>
-        <label class="w3-text-brown"><b>日期 :</label>
+        <p><div align="left">
+        <label class="w3-text-brown"><b>日期 &ensp;&emsp;:</label>
         <input type="date" name="Date"  required>
         
+
         <br>
         <label class="w3-text-brown"> 工讀時間: </label>
         <input class="w3-light-grey" type="time" name="start" required>
@@ -176,7 +177,7 @@ echo '
         
         
         <br>
-        <div align="left">
+        
         <label class="w3-text-brown"> 工作內容:      </label>
         <input class="w3-input w3-border w3-light-grey" type="text" name="Task" required >
         <br>
@@ -189,12 +190,12 @@ echo '
         <br>
         <br>
         <label class="w3-text-brown">  晚上進館人數: </label>
-        <input class="w3-input w3-border w3-light-grey" type="text" name="night" maxlength="2" size="2">
+        <input class="w3-input w3-border w3-light-grey" type="number" name="night" maxlength="2" size="2" min="0" max="99">
         </b>
         <br>
         <br>
         <label class="w3-text-brown"> 備註: </label>
-        <textarea class="w3-input w3-border w3-light-grey" type="text" name="Comment">
+        <textarea class="w3-input w3-border w3-light-grey" type="text" name="Comment"  cols="40" rows="5">
         </textarea>
         </b>
         </p>
@@ -271,7 +272,8 @@ if ($result->num_rows > 0) {
         <td>".$row["Assigned_by"]."</td>
         <td>".$row["Expected_Completion"]."</td>
         <td>".$row["night"]."</td>
-        <td>".$row["Comment"]."</td> 
+        <td><pre>".nl2br($row["Comment"])."</td> </pre>
+        <td><a href='delete.php?id=".$row['No']."'>delete</a></td>
     </tr>";
   }
   echo '</table></div></div>';
@@ -291,6 +293,7 @@ echo'<p></p>
 
 
 ?>
+
 
 <!--
 <!DOCTYPE html>

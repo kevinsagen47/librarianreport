@@ -30,6 +30,7 @@ class adminlte_login
         <!DOCTYPE html>
         <html>
         <head>
+        <title>工讀生每日工作報告表</title>
             <style>
             body,html{height:100%}
             body{

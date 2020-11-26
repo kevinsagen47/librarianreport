@@ -84,6 +84,7 @@ $today = $year . '-'.$month.'-'.$day;
   }
 }
   */
+  //<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 echo '
 <!DOCTYPE html>
 <html>
@@ -93,6 +94,11 @@ echo '
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+
+
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <title>工讀生每日工作報告表</title>
 
@@ -147,11 +153,12 @@ th {
 echo '
 
 
+
   <div class="w3-card-4 w3-center content" style="width:400px">
     <div style="text-align:center" class="w3-container w3-brown" >
       <h2>工讀生每日工作報告表</h2>
     </div>
-    <form class="w3-container" action="pizzasubmit.php" method="post" ;">
+    <form class="w3-container" action="PDOsubmit.php" method="post" ;">
         <br>
         
         <p>
@@ -182,21 +189,23 @@ echo '
         <input class="w3-input w3-border w3-light-grey" type="text" name="Task" required >
         <br>
         <label class="w3-text-brown"> 交辦館員: </label>
+      
         <input class="w3-input w3-border w3-light-grey" type="text" name="Assigned_by" required>
+        
         <br>
         <label class="w3-text-brown">  預計完工期限: </label>
         <input class="w3-input w3-border w3-light-grey" type="text" name="Expected_Completion"required>
         </b>
         <br>
         <br>
+        
         <label class="w3-text-brown">  晚上進館人數: </label>
         <input class="w3-input w3-border w3-light-grey" type="number" name="night" maxlength="2" size="2" min="0" max="99">
         </b>
         <br>
         <br>
         <label class="w3-text-brown"> 備註: </label>
-        <textarea class="w3-input w3-border w3-light-grey" type="text" name="Comment"  cols="40" rows="5">
-        </textarea>
+        <textarea class="w3-input w3-border w3-light-grey" type="text" name="Comment"></textarea>
         </b>
         </p>
         </div>
@@ -204,12 +213,24 @@ echo '
         <input type="submit">
         </p>
         <p>
-        <a href="javascript:window.location.replace(\''.$login.'\');" >Logout</a>
+        <input type="button" onclick="javascript:window.location.replace(\''.$login.'\');" value="Logout">
         </p>
     </form>
-  </div>';
+  </div>
+  
+  <script>
+  $(".textTest input").keyup(function () {
+    if ($(this).val().match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]+/g)) {
+        
+    }
+    else alert("Only Chinese Characters");
+  });
+  </script>
 
+  
+  ';
 
+  
 
 
 
@@ -272,8 +293,10 @@ if ($result->num_rows > 0) {
         <td>".$row["Assigned_by"]."</td>
         <td>".$row["Expected_Completion"]."</td>
         <td>".$row["night"]."</td>
-        <td><pre>".nl2br($row["Comment"])."</td> </pre>
-        <td><a href='delete.php?id=".$row['No']."'>delete</a></td>
+        <td><pre>".$row["Comment"]."</td> </pre>
+        <td><a href='delete.php?id=".$row['No']."'
+        class='delete' data-confirm='Are you sure to delete this item?'> 
+        delete</a></td>
     </tr>";
   }
   echo '</table></div></div>';
@@ -285,9 +308,26 @@ $conn->close();
 
 
 
-echo'<p></p>
+echo"<p></p>
+<script>
+var deleteLinks = document.querySelectorAll('.delete');
+
+for (var i = 0; i < deleteLinks.length; i++) {
+deleteLinks[i].addEventListener('click', function(event) {
+event.preventDefault();
+
+var choice = confirm(this.getAttribute('data-confirm'));
+
+if (choice) {
+  window.location.href = this.getAttribute('href');
+}
+});
+}
+</script>
+
+
 </body>
-</html>';
+</html>";
 
 
 

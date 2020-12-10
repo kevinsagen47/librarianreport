@@ -121,6 +121,8 @@ table {
 }
 
 th, td {
+  max-width:300px;
+  word-wrap:break-word;
   text-align: left;
   padding: 8px;
   border: 1px solid #ddd;
@@ -154,7 +156,7 @@ echo '
 
 
 
-  <div class="w3-card-4 w3-center content" style="width:400px">
+  <div class="w3-card-4 w3-center content" style="width:600px">
     <div style="text-align:center" class="w3-container w3-brown" >
       <h2>工讀生每日工作報告表</h2>
     </div>
@@ -186,7 +188,7 @@ echo '
         <br>
         
         <label class="w3-text-brown"> 工作內容:      </label>
-        <input class="w3-input w3-border w3-light-grey" type="text" name="Task" required >
+        <textarea class="w3-input w3-border w3-light-grey" type="text" name="Task" required ></textarea>
         <br>
         <label class="w3-text-brown"> 交辦館員: </label>
       
@@ -213,7 +215,7 @@ echo '
         <input type="submit">
         </p>
         <p>
-        <input type="button" onclick="javascript:window.location.replace(\''.$login.'\');" value="Logout">
+        <input type="button" onclick="javascript:window.location.replace(\''.$login.'\');" value="登出">
         </p>
     </form>
   </div>
@@ -270,26 +272,52 @@ $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
   echo '
-  <div class="container">
+  <div class="container"style="width:1400px">
   <div class="table-responsive">
   <table class="table center">
     <tr>
-        <th>日期</th>
-        <th>工讀時間</th>
-        <th>工作內容</th>
-        <th>交辦館員</th>
-        <th>預計完工期限</th>
-        <th>晚上進館人數</th>
-        <th>備註</th>
+    <th style="width:108px">日期</th>
+    <th style="width:125px">工讀時間</th>
+    <th style="width:100px">長度</th>
+    <th style="width:150px">工作內容</th>
+    <th style="width:80px">交辦館員</th>
+    <th style="width:80px">預計完工期限</th>
+    <th style="width:70px">晚上進館人數</th>
+    <th>備註</th>
+    <th>刪除</th>
     </tr>';
   // output data of each row
 
+
+  $e = new DateTime('00:00');
+  $f = clone $e;
+
+
+  //echo "Total interval : ", $Tinterval->format("%H:%I"), "\n";
+
   while($row = $result->fetch_assoc()) {
+    
+    
+    //$assigned_time = "$row[start]";
+    //$completed_time= "$row[end]";   
+    //$datedate=date("Y-m-d",strtotime($_POST["Date"]));
+    $start_time=date("H:i",strtotime($row["start"]));
+    $end_time=date("H:i",strtotime($row["end"]));
+    $d1 = new DateTime($start_time);
+    $d2 = new DateTime($end_time);
+    $interval = $d2->diff($d1);
+    
+    
+    $e->add($interval);
+    $Tinterval=$f->diff($e);
+    //echo "Total interval : ", $f->diff($e)->format("%H:%I"), "\n";
+    //echo "Total interval : ", $Tinterval->format("%H:%I"), "\n";
     echo 
     "<tr>
         <td>".$row["Date"]."</td>
         <td>".$row["start"]."—".$row["end"]."</td>
-        <td>".$row["Task"]."</td>
+        <td>".$interval->format("%H時%I分")."</td>
+        <td><pre>".$row["Task"]."</pre></td>
         <td>".$row["Assigned_by"]."</td>
         <td>".$row["Expected_Completion"]."</td>
         <td>".$row["night"]."</td>
@@ -304,6 +332,12 @@ if ($result->num_rows > 0) {
 else {
   echo "0 results";
     }
+    echo "
+    <div style='text-align:center' class='w3-container w3-green' >
+    <font size='+2'>
+    終數: ", $f->diff($e)->format("%d天%H小時%I分鐘"), "\n
+    </font>
+    </div>";
 $conn->close();
 
 

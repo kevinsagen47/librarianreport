@@ -1,5 +1,12 @@
 <?php
 
+//require_once('list_index.php');
+session_start();
+$login = 'logout2.php?login=list_index.php';
+
+if (isset($_SESSION['permission'])) {
+
+
 $servername = "localhost";
 $username = "kevin0623";
 $password = "@lis-kevin-0623,.";
@@ -26,12 +33,7 @@ echo'
 
         
 while($row = $result->fetch_assoc()) {
-  echo 
-  "<tr>
-      <td>".$row["name"]."</td>
-      </tr>";
-    }
-*/
+  echo require_once('protect-this.php')
 /*
 $query = "SELECT 1";
 $result = $mysqli->query($query);
@@ -53,7 +55,7 @@ $followingdata = $result->fetch_assoc()
   }
 
 */
-
+//require_once('protect-this.php')
 
 
 /*
@@ -102,7 +104,7 @@ echo '
 
 
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<title>工讀生每日工作報告表</title>
+<title>查詢系統</title>
 
 
 <style>
@@ -117,10 +119,14 @@ table {
 
 }
 
-.center{
-  margin-left:auto; 
-  margin-right:auto;
-}
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  }
 
 th, td {
   text-align: left;
@@ -143,7 +149,10 @@ th {
 </head>
 <body>
 
-<form class="w3-container" action="list0623.php" method="post" ;">
+<form class="w3-container w3-card-4 w3-center center" action="secretttlist0623.php" method="post" ;">
+<div style="text-align:center" class="w3-container w3-brown" style="width:600px">
+<h2>工讀生工作報告表查詢系統</h2>
+</div>
 <p><div align="left">
 <label class="w3-text-brown"><b>日期 &ensp;&emsp;&emsp;&emsp;&ensp;&ensp;&ensp;&ensp;:</label>
 <input type="date" name="Date" ></p>
@@ -161,11 +170,24 @@ th {
 '.$name_list.'<br>
 </p>
 </p>
-<p></p>
+
 <p>
         <input type="submit">
         </p>
 </form>
+
+
+<p>
+        <form action ="logout2.php">
+            <button type="submit" name="logout" class="btn-primary">登出</button>
+        </form>
+
+
+</p>
 </div>
-';
+';}
+else{
+  header("Location: list_index.php");
+  exit();
+}
 ?>

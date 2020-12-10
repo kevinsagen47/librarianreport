@@ -1,5 +1,7 @@
 <?php 
+session_start();
 
+if (isset($_SESSION['permission'])) {
 echo '
 <!DOCTYPE html>
 <html>
@@ -36,6 +38,8 @@ table {
 }
 
 th, td {
+  max-width:500px;
+  word-wrap:break-word;
   text-align: left;
   padding: 8px;
   border: 1px solid #ddd;
@@ -124,33 +128,55 @@ echo"<p></p>";
 //
 if ($result->num_rows > 0) {
   echo '
+<p>
+<div style="text-align:center" >
+<form action ="list_index.php">
+<button type="submit" name="back" class="btn-primary">上一頁</button>
+</form>
+</p>
+</div>
+
   <div class="w3-card-4 w3-center content" style="width:400px">
     <div style="text-align:center" class="w3-container w3-brown" >
       <h2>工讀生每日工作報告表</h2>
     </div>
     </div>
-  <div class="container">
+  <div class="container"style="width:1800px">
   <div class="table-responsive">
   <table class="table center">
     <tr>
-        <th>Name</th>
-        <th>日期</th>
-        <th>工讀時間</th>
-        <th>工作內容</th>
-        <th>交辦館員</th>
-        <th>預計完工期限</th>
-        <th>晚上進館人數</th>
+        <th style="width:50px">Name</th>
+        <th style="width:108px">日期</th>
+        <th style="width:125px">工讀時間</th>
+        <th style="width:60px">長度</th>
+        <th style="width:150px">工作內容</th>
+        <th style="width:80px">交辦館員</th>
+        <th style="width:80px">預計完工期限</th>
+        <th style="width:70px">晚上進館人數</th>
         <th>備註</th>
-    </tr>';
+        
+        </tr>';
   // output data of each row
 
+  $e = new DateTime('00:00');
+  $f = clone $e;
+
   while($row = $result->fetch_assoc()) {
+    $start_time=date("H:i",strtotime($row["start"]));
+    $end_time=date("H:i",strtotime($row["end"]));
+    $d1 = new DateTime($start_time);
+    $d2 = new DateTime($end_time);
+    $interval = $d2->diff($d1);
+    $e->add($interval);
+    $Tinterval=$f->diff($e);
+    
     echo 
     "<tr>
         <td>".$row["name"]."</td>
         <td>".$row["Date"]."</td>
         <td>".$row["start"]."—".$row["end"]."</td>
-        <td>".$row["Task"]."</td>
+        <td>".$interval->format("%H時%I分")."</td>
+        <td><pre>".$row["Task"]."</pre></td>
         <td>".$row["Assigned_by"]."</td>
         <td>".$row["Expected_Completion"]."</td>
         <td>".$row["night"]."</td>
@@ -163,18 +189,25 @@ else {
   echo "0 results";
     }
 $conn->close();
-
+echo "
+<div style='text-align:center' class='w3-container w3-green' >
+<font size='+2'>
+終數: ", $f->diff($e)->format("%d天 %H小時 %I分鐘"), "\n
+</font>
+</div>";
 echo'
 <p>
-<button onclick="goBack()">Back</button>
-</p>
-<script>
-function goBack(){
-    window.history.back();
-}
-</script>';
+<div style="text-align:center" >
+<form action ="list_index.php">
+<button type="submit" name="back" class="btn-primary">上一頁</button>
+</form>
+</p>';
 echo"
 </body>
-</html>";
+</html>";}
+else{
+  header("Location: list_index.php");
+  exit();
+}
 
 ?>
